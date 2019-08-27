@@ -1,5 +1,5 @@
 import React from 'react';
-import {func, string} from 'prop-types';
+import {objectOf, func, string} from 'prop-types';
 import {View} from 'react-native';
 
 import Button from './Button';
@@ -32,7 +32,7 @@ CalculatorButtons.propTypes = {
   addDigit: func.isRequired,
   applyOperation: func.isRequired,
   clearMemory: func.isRequired,
-  style: string.isRequired,
+  style: objectOf(string).isRequired,
 };
 
 export default CalculatorButtons;
