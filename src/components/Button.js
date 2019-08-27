@@ -24,16 +24,16 @@ const styles = StyleSheet.create({
     },
 });
 
-const Button = props => {
+const Button = ({double, triple, operation, label, onClick}) => {
     const stylesButton = [styles.button];
-    if (props.double) stylesButton.push(styles.buttonDouble);
-    if (props.triple) stylesButton.push(styles.buttonTriple);
-    if (props.operation) stylesButton.push(styles.operationButton);
+    if (double) stylesButton.push(styles.buttonDouble);
+    if (triple) stylesButton.push(styles.buttonTriple);
+    if (operation) stylesButton.push(styles.operationButton);
 
 
     return (
-        <TouchableHighlight onPress={() => props.onClick(props.label)}>
-            <Text style={stylesButton}>{props.label}</Text>
+        <TouchableHighlight onPress={() => onClick(label)}>
+            <Text style={stylesButton}>{label}</Text>
         </TouchableHighlight>
     );
 };

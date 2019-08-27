@@ -15,17 +15,17 @@ const styles = StyleSheet.create({
     },
 });
 
-const Display = props => {
+const Display = ({value}) => {
     return (
         <View style={styles.display}>
             <Text 
                 style={styles.displayValue} 
                 numberOfLines={1}
             >
-                {props.value}
+                {value}
             </Text>
         </View>
     );
-}
+};
 
 export default Display;

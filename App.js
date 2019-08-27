@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import Button from './src/components/Button';
 import Display from './src/components/Display';
+import CalculatorButtons from './src/components/CalculatorButtons';
 
 const initialState = {
   displayValue: '0',
@@ -12,84 +12,75 @@ const initialState = {
   current: 0,
 }
 
-class App extends Component {
-  state = { ...initialState };
+const App = () => {
+  const [displayValue, setDisplayValue] = useState(initialState.displayValue);
+  const [clearDisplay, setClearDisplay] = useState(initialState.clearDisplay);
+  const [operation, setOperation] = useState(initialState.operation);
+  const [values, setValues] = useState(initialState.values);
+  const [current, setCurrent] = useState(initialState.current);
 
-  addDigit = n => {
-    console.debug(typeof this.state.displayValue)
+  const addDigit = n => {
+    const hasToClearDisplay = displayValue === '0' || clearDisplay;
 
-    const clearDisplay = this.state.displayValue === '0' || this.state.clearDisplay;
-    
-    if (n === '.' && !clearDisplay && this.state.displayValue.includes('.')) {
-      return
+    if (n === '.' && !hasToClearDisplay && displayValue.includes('.')) {
+      return;
     }
 
-    const currentValue = clearDisplay ? '' : this.state.displayValue;
-    const displayValue = currentValue + n;
-    this.setState({ displayValue, clearDisplay: false });
+    const currentValue = hasToClearDisplay ? '' : displayValue;
+    const newDisplayValue = currentValue + n;
+    setDisplayValue(newDisplayValue);
+    setClearDisplay(false);
 
     if (n !== '.') {
-      const newValue = parseFloat(displayValue);
-      const values = [...this.state.values];
-      values[this.state.current] = newValue;
-      this.setState({ values });
+      const newValue = parseFloat(newDisplayValue);
+      const newValues = [...values];
+      newValues[current] = newValue;
+      setValues(newValues)
     }
-  }
+  };
 
-  clearMemory = () => {
-    this.setState({ ...initialState });
-  }
+  const clearMemory = () => {
+    setDisplayValue(initialState.displayValue);
+    setClearDisplay(initialState.clearDisplay);
+    setOperation(initialState.operation);
+    setValues(initialState.values);
+    setCurrent(initialState.current);
+  };
 
-  setOperation = operation => {
-    if(this.state.current === 0) {
-      this.setState({ operation, current: 1, clearDisplay: true });
+  const applyOperation = newOperation => {
+    if (current === 0) {
+      setOperation(newOperation);
+      setCurrent(1);
+      setClearDisplay(true);
     } else {
-      const equals = operation === '=';
-      const values = [...this.state.values]
+      const equals = newOperation === '=';
+      const newValues = [...values]
       try {
-        values[0] = eval(`${values[0]} ${this.state.operation} ${values[1]}`);
-      } catch (e){
-        values[0] = this.state.values[0];
+        newValues[0] = eval(`${newValues[0]} ${operation} ${newValues[1]}`);
+      } catch (e) {
+        newValues[0] = values[0];
       }
 
-      values[1] = 0;
-      this.setState({
-        displayValue: values[0].toString(),
-        operation: equals ? null : operation,
-        current: equals ? 0 : 1,
-        // clearDisplay: !equals,
-        clearDisplay: true,
-        values,
-      })
+      newValues[1] = 0;
+      setDisplayValue(newValues[0].toString());
+      setOperation(equals ? null : operation);
+      setCurrent(equals ? 0 : 1);
+      setClearDisplay(true);
+      setValues(newValues);
     }
-  }
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Display value={this.state.displayValue} />
-        <View style={styles.buttons}>
-          <Button label="AC" triple onClick={this.clearMemory} />
-          <Button label="/" operation onClick={this.setOperation} />
-          <Button label="7" onClick={this.addDigit} />
-          <Button label="8" onClick={this.addDigit} />
-          <Button label="9" onClick={this.addDigit} />
-          <Button label="*" operation onClick={this.setOperation} />
-          <Button label="4" onClick={this.addDigit} />
-          <Button label="5" onClick={this.addDigit} />
-          <Button label="6" onClick={this.addDigit} />
-          <Button label="-" operation onClick={this.setOperation} />
-          <Button label="1" onClick={this.addDigit} />
-          <Button label="2" onClick={this.addDigit} />
-          <Button label="3" onClick={this.addDigit} />
-          <Button label="+" operation onClick={this.setOperation} />
-          <Button label="0" double onClick={this.addDigit} />
-          <Button label="." onClick={this.addDigit} />
-          <Button label="=" operation onClick={this.setOperation} />
-        </View>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <Display value={displayValue} />
+      <CalculatorButtons 
+        style={styles.buttons}
+        clearMemory={clearMemory}
+        applyOperation={applyOperation}
+        addDigit={addDigit}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
