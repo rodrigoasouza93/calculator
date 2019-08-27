@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {string} from 'prop-types';
+import {StyleSheet, Text, View} from 'react-native';
 
 const styles = StyleSheet.create({
   display: {
@@ -15,17 +16,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const Display = ({ value }) => {
+const Display = ({value}) => {
   return (
     <View style={styles.display}>
-      <Text
-        style={styles.displayValue}
-        numberOfLines={1}
-      >
+      <Text style={styles.displayValue} numberOfLines={1}>
         {value}
       </Text>
     </View>
   );
+};
+
+Display.propTypes = {
+  value: string.isRequired,
 };
 
 export default Display;

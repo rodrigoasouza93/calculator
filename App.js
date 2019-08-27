@@ -1,8 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
 import Display from './src/components/Display';
 import CalculatorButtons from './src/components/CalculatorButtons';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  buttons: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+});
 
 const initialState = {
   displayValue: '0',
@@ -10,7 +20,7 @@ const initialState = {
   operation: null,
   values: [0, 0],
   current: 0,
-}
+};
 
 const App = () => {
   const [displayValue, setDisplayValue] = useState(initialState.displayValue);
@@ -35,7 +45,7 @@ const App = () => {
       const newValue = parseFloat(newDisplayValue);
       const newValues = [...values];
       newValues[current] = newValue;
-      setValues(newValues)
+      setValues(newValues);
     }
   };
 
@@ -54,11 +64,12 @@ const App = () => {
       setClearDisplay(true);
     } else {
       const equals = newOperation === '=';
-      const newValues = [...values]
+      const newValues = [...values];
       try {
+        // eslint-disable-next-line no-eval
         newValues[0] = eval(`${newValues[0]} ${operation} ${newValues[1]}`);
       } catch (e) {
-        newValues[0] = values[0];
+        [newValues[0]] = values;
       }
 
       newValues[1] = 0;
@@ -82,15 +93,5 @@ const App = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  buttons: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  }
-});
 
 export default App;

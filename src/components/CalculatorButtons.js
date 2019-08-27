@@ -1,9 +1,10 @@
 import React from 'react';
-import { View } from 'react-native';
+import {func, string} from 'prop-types';
+import {View} from 'react-native';
 
 import Button from './Button';
 
-const CalculatorButtons = ({ style, clearMemory, applyOperation, addDigit }) => {
+const CalculatorButtons = ({style, clearMemory, applyOperation, addDigit}) => {
   return (
     <View style={style}>
       <Button label="AC" triple onClick={clearMemory} />
@@ -25,6 +26,13 @@ const CalculatorButtons = ({ style, clearMemory, applyOperation, addDigit }) => 
       <Button label="=" operation onClick={applyOperation} />
     </View>
   );
-}
+};
+
+CalculatorButtons.propTypes = {
+  addDigit: func.isRequired,
+  applyOperation: func.isRequired,
+  clearMemory: func.isRequired,
+  style: string.isRequired,
+};
 
 export default CalculatorButtons;

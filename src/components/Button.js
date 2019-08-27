@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, Dimensions, TouchableHighlight } from 'react-native';
+import {bool, func, string} from 'prop-types';
+import {StyleSheet, Text, Dimensions, TouchableHighlight} from 'react-native';
 
 const styles = StyleSheet.create({
   button: {
@@ -24,18 +25,31 @@ const styles = StyleSheet.create({
   },
 });
 
-const Button = ({ double, triple, operation, label, onClick }) => {
+const Button = ({double, triple, operation, label, onClick}) => {
   const stylesButton = [styles.button];
   if (double) stylesButton.push(styles.buttonDouble);
   if (triple) stylesButton.push(styles.buttonTriple);
   if (operation) stylesButton.push(styles.operationButton);
-
 
   return (
     <TouchableHighlight onPress={() => onClick(label)}>
       <Text style={stylesButton}>{label}</Text>
     </TouchableHighlight>
   );
+};
+
+Button.defaultProps = {
+  double: false,
+  operation: false,
+  triple: false,
+};
+
+Button.propTypes = {
+  double: bool,
+  label: string.isRequired,
+  onClick: func.isRequired,
+  operation: bool,
+  triple: bool,
 };
 
 export default Button;
