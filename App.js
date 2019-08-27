@@ -73,7 +73,7 @@ const App = () => {
   return (
     <View style={styles.container}>
       <Display value={displayValue} />
-      <CalculatorButtons 
+      <CalculatorButtons
         style={styles.buttons}
         clearMemory={clearMemory}
         applyOperation={applyOperation}
